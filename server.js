@@ -18,6 +18,7 @@ const Person = require("./models/Person");
 const MenuItem = require("./models/MenuItem");
 const personRoutes = require('./routes/personRoutes');
 const menuRoutes = require('./routes/menuRoutes');
+require('dotenv').config();
 
 
 const bodyParser = require("body-parser");
@@ -35,6 +36,7 @@ app.use('/person',personRoutes);
 app.use('/menu-item',menuRoutes);
 
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
   console.log("Server running on http://localhost:3000");
 });
