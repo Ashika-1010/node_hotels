@@ -14,11 +14,10 @@
 
 const express = require("express");
 const db = require("./db");
-const Person = require("./models/Person");
-const MenuItem = require("./models/MenuItem");
 const personRoutes = require('./routes/personRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 require('dotenv').config();
+const passport = require('./auth');
 
 
 const bodyParser = require("body-parser");
@@ -27,7 +26,16 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
+const logRequest = (req,res,next) =>{
+  console.log(`[${new Date().toLocaleDateString()}] Request made to : ${req.originalUrl}`);
+  next();
+}
+app.use(logRequest);
+
+app.use(passport.initialize());
+const localAuthMiddleware = passport.authenticate('local',{session: false})
+
+app.get("/",(req, res) => {
   res.send("Welcome to Shetty's hotel");
 });
 
@@ -38,5 +46,5 @@ app.use('/menu-item',menuRoutes);
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
-  console.log("Server running on http://localhost:3000");
+  console.log("Server running....");
 });
